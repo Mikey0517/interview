@@ -1,0 +1,16 @@
+<!DOCYTPE html>
+<html lang="cn">
+  <head>
+    <title>Vue</title>
+  </head>
+  <body>
+    <div id="app">
+      <span>{{ msg }}</span>
+      <input v-model="msg" />
+      <div v-html="html"></div>
+      <div v-text="msg"></div>
+      <div v-on:click="handleClick">{{msg}}</div>
+    </div>
+    <script src="./index.js" type="module"></script>
+  </body>
+</html>

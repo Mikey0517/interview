@@ -2,6 +2,7 @@ const Renderer = require( 'stylus/lib/renderer.js' );
 const Parser = require( './node_modules/stylus/lib/parser.js' );
 const nodes = require( './node_modules/stylus/lib/nodes/index.js' );
 const Compiler = require( './node_modules/stylus/lib/visitor/compiler.js' );
+const Normalizer = require('./node_modules/stylus/lib/visitor/normalizer');
 const fs = require( 'fs' );
 
 const trim = function ( str ) {
@@ -30,7 +31,8 @@ Renderer.prototype.render = function () {
     nodes.filename = this.options.filename;
     // parse
     var ast = parser.parse();
-    ast = deep( ast.nodes );
+    deep( ast.nodes );
+    console.log('%c [ ast ]-33', 'font-size:13px; background:pink; color:#bf2c9f;', ast.nodes)
     // evaluate
     this.evaluator = new this.options.Evaluator(ast, this.options);
     this.nodes = nodes;
@@ -38,13 +40,13 @@ Renderer.prototype.render = function () {
     ast = this.evaluator.evaluate();
 
     // normalize
-    // var normalizer = new Normalizer(ast, this.options);
-    // ast = normalizer.normalize();
+    var normalizer = new Normalizer(ast, this.options);
+    ast = normalizer.normalize();
 
     // compile
     var compiler = new Compiler(ast, this.options);
     var css = compiler.compile();
-    console.log('%c [ css ]', 'font-size:13px; background:pink; color:#bf2c9f;', css)
+    fs.writeFileSync('stylus.css', css)
 
     // expose sourcemap
     if (this.options.sourcemap) this.sourcemap = compiler.map.toJSON();
@@ -52,7 +54,7 @@ Renderer.prototype.render = function () {
     console.log('%c [ err ]', 'font-size:13px; background:pink; color:#bf2c9f;', err)
   }
 }
-const render = new Renderer( entry, {} ).render();
+const render = new Renderer( `${ variable }\n${ entry }`, {} ).render();
 
 // const parser = new Parser( entry, {} );
 
@@ -61,31 +63,27 @@ const render = new Renderer( entry, {} ).render();
 // let ast = parser.parse();
 
 function deep ( root ) {
-  let _nodes = [];
-
   for ( let i = 0; i < root.length; i++ ) {
     const node = root[ i ];
-    let res = false;
     if ( node instanceof nodes.Group ) {
       for ( let j = 0; j < node.nodes.length; j++ ) {
-        node.nodes[ j ].block.nodes = deep( node.nodes[ j ].block.nodes )
+        deep( node.nodes[ j ].block.nodes )
       }
     } 
     if ( node instanceof nodes.Property ){
       for ( let k = 0; k < node.expr.nodes.length; k++ ) {
-        if ( node.expr.nodes[ k ] instanceof nodes.Ident && variableObj[ node.expr.nodes[ k ].string ] !== void 0 ) {
-          res = true;
-          continue;
+        if ( !( node.expr.nodes[ k ] instanceof nodes.Ident && variableObj[ node.expr.nodes[ k ].string ] !== void 0 ) ) {
+          root.splice( i, 1 )
+          i--
+          break
         }
       }
     }
-
-    if ( res ) {
-      _nodes.push( node );
-    }
+    // if ( node instanceof nodes.Ident ) {
+    //   root.splice( i, 1 )
+    //   i--
+    // }
   }
-
-  return _nodes;
 }
 
 // // ast = deep( ast.nodes );

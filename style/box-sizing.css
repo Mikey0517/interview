@@ -1,0 +1,9 @@
+/* 盒模型 */
+/* 怪异盒模型 */
+.css {
+  box-sizing: border-box; /* width = border + padding + content */
+}
+/* 标准盒模型 */
+.css1 {
+  box-sizing: content-box;  /* width = content */
+}

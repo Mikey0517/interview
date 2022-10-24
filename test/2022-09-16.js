@@ -2,8 +2,8 @@
  * @Author       : 徐洋皓月
  * @Date         : 2022-09-16 11:12:29
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-09-16 15:46:54
- * @FilePath     : /interview/test/index.js
+ * @LastEditTime : 2022-10-12 19:36:40
+ * @FilePath     : /interview/test/2022-09-16.js
  */
 // Promise.all, debounce, throttle, new, extend, flat, reduce, instanceof, call, apply, bind
 Promise.prototype.all = function (arr) {
@@ -92,7 +92,7 @@ function throttle (fn, wait) {
 function myNew () {
   const obj = new Object()
 
-  const constructor = Array.prototype.shift(arguments)
+  const constructor = Array.prototype.shift.call(arguments)
 
   obj.__proto__ = constructor.prototype
 

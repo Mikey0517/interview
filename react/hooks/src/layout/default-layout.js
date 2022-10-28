@@ -2,10 +2,10 @@
  * @Author       : 徐洋皓月
  * @Date         : 2022-10-27 17:48:54
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-10-28 01:16:25
+ * @LastEditTime : 2022-10-28 21:22:55
  * @FilePath     : /interview/react/hooks/src/layout/default-layout.js
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 import routes from '../router/routes';
@@ -25,8 +25,11 @@ function DefaultLayout () {
 
   const handleClick = (params) => {
     navigate(params.key)
-    setCurrent(params.key)
   }
+
+  useEffect(() => {
+    setCurrent(location.pathname.split('/')[1])
+  }, [location.pathname])
 
   return (
     <Layout style={{ height: '100vh', overflow: 'auto' }}>

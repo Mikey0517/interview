@@ -2,7 +2,7 @@
  * @Author       : 徐洋皓月
  * @Date         : 2022-10-27 13:34:16
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-10-27 13:43:58
+ * @LastEditTime : 2022-10-29 18:58:17
  * @FilePath     : /interview/react/hooks/src/components/componentA.js
  */
 import { useEffect, useState } from 'react'
@@ -16,7 +16,7 @@ function ComponentA () {
     console.log('effect render')
 
     return function () {
-      console.log('effect end')
+      console.log('effect end test')
     }
   }, [])
 

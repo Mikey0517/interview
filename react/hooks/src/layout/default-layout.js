@@ -34,7 +34,7 @@ function DefaultLayout () {
   return (
     <Layout style={{ height: '100vh', overflow: 'auto' }}>
       <Sider>
-        <Menu items={ items } selectedKeys={[current]} onClick={ handleClick }/>
+        <Menu items={ items } selectedKeys={ [current] } onClick={ handleClick }/>
       </Sider>
       <Layout>
         <Content>

@@ -1,23 +1,29 @@
 /**
  * @Author       : 徐洋皓月
- * @Date         : 2022-09-16 11:12:29
+ * @Date         : 2022-10-30 23:09:55
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-10-31 00:04:50
- * @FilePath     : /interview/test/2022-09-16.js
+ * @LastEditTime : 2022-10-31 00:25:49
+ * @FilePath     : /interview/test/2022-10-30.js
  */
 // Promise.all, debounce, throttle, new, extend, flat, reduce, instanceof, call, apply, bind
 Promise.prototype.all = function (arr) {
   const args = Array.prototype.slice.call(arr)
+
   return new Promise(function (resolve, reject) {
     if (args.length === 0) resolve([])
-    let remaining = args.length
-    function res (val, i) {
+    const remaining = args.length
+
+    for (let i = 0; i < args.length; i++) {
+      res(i, args[i])
+    }
+
+    function res (i, val) {
       try {
-        if (val && (typeof val === 'object' || typeof val === 'function')) {
+        if (val && (typeof val === 'function' || typeof val === 'object')) {
           const { then } = val
           if (typeof then === 'function') {
             then.call(val, function (val) {
-              res(val, i)
+              res(i, val)
             })
             return
           }
@@ -30,20 +36,20 @@ Promise.prototype.all = function (arr) {
         reject(e)
       }
     }
-    for (let i = 0; i < args.length; i++) {
-      res(args[i], i)
-    }
   })
 }
 
-function debounce (fn, wait, immediate) {
+const debounce = function (fn, wait, immediate) {
   let timeout = null
+
   const debounced = function () {
     const context = this
     const args = arguments
+
     if (timeout) clearTimeout(timeout)
+
     if (immediate) {
-      let call = !timeout
+      const call = !timeout
       timeout = setTimeout(function () {
         timeout = null
       }, wait)
@@ -60,12 +66,13 @@ function debounce (fn, wait, immediate) {
     clearTimeout(timeout)
     timeout = null
   }
+
   return debounced
 }
 
-function throttle (fn, wait) {
-  let prevtime = 0
+const throttle = function (fn, wait) {
   let timeout
+  let prevtime = 0
 
   const throttled = function () {
     const context = this
@@ -73,7 +80,7 @@ function throttle (fn, wait) {
     const now = +new Date()
     const remaining = wait - (now - prevtime)
 
-    if (remaining < 0) {
+    if (remaining <= 0) {
       fn.apply(context, args)
       prevtime = now
       clearTimeout(timeout)
@@ -87,6 +94,8 @@ function throttle (fn, wait) {
       }, remaining)
     }
   }
+
+  return throttled
 }
 
 function myNew () {
@@ -102,7 +111,7 @@ function myNew () {
 }
 
 function extend (child, parent) {
-  function create (o) {
+  function create(o) {
     function F () {}
     F.prototype = o
     return new F()
@@ -125,27 +134,27 @@ function flat (arr, level = 0) {
 
 Array.prototype.reduce = function (fn) {
   if (this === null || this === undefined) {
-    throw new Error('...')
+    throw Error('...')
   }
 
   if (typeof fn !== 'function') {
-    throw new Error('...')
+    throw Error('...')
   }
 
   const o = Object(this)
   const length = o.length
-  let value
   let k = 0
+  let value
 
-  if (arguments.length > 1) {
+  if (arguments[1] !== undefined) {
     value = arguments[1]
   } else {
-    while (k < length && !(k in o)) {
+    while(k < length && !(k in o)) {
       k++
     }
 
     if (k >= length) {
-      throw new Error('...')
+      throw Error('...')
     }
 
     value = o[k++]
@@ -177,55 +186,58 @@ function instanceOf (left, right) {
   }
 }
 
-Function.prototype.call = function (context) {
-  context = Object(context) || window
+function call (context) {
+  context = (context === null || context === undefined) ? window : Object(context)
 
   context.fn = this
 
   const args = []
 
   for (let i = 1; i < arguments.length; i++) {
-    args.push(`arguments[${i}]`)
+    args.push(`arguments[${ i }]`)
   }
 
-  const result = eval(`context.fn(${args})`)
+  const result = eval(`context.fn(${ args })`)
 
   Reflect.deleteProperty(context, 'fn')
 
   return result
 }
 
-Function.prototype.apply = function (context, args) {
-  context = Object(context) || window
+function apply (context, args) {
+  context = (context === null || context === undefined) ? window : Object(context)
 
   context.fn = this
 
   const params = []
+
   for (let i = 0; i < args.length; i++) {
-    params.push(`args[${i}]`)
+    params.push(`args[${ i }]`)
   }
 
-  const result = eval(`context.fn(${params})`)
+  const result = eval(`context.fn(${ params })`)
 
   Reflect.deleteProperty(context, 'fn')
 
   return result
 }
 
-Function.prototype.bind = function (context) {
+function bind (context) {
   function create (o) {
     function F () {}
     F.prototype = o
-    return new F()
+    return new F ()
   }
 
-  context = Object(context) || window
-  const args = Array.prototype.slice.call(arguments, 1)
-  const self = this
+  context = (context === null || context === undefined) ? window : Object(context)
+
+  const fn = this
+
+  const args = Array.prototype.slice(arguments, 1)
 
   function FBound () {
-    const _args = Array.prototype.slice.call(arguments)
-    return self.apply(this instanceof FBound ? this : context, args.concat(_args))
+    const _args = Array.prototype.slice(arguments)
+    return fn.apply(this instanceof FBound ? this : context, args.concat(_args))
   }
 
   FBound.prototype = create(this.prototype)

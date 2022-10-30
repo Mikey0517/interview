@@ -1,3 +1,10 @@
+/*
+ * @Author       : 徐洋皓月
+ * @Date         : 2022-10-30 13:22:33
+ * @LastEditors  : 徐洋皓月
+ * @LastEditTime : 2022-10-30 13:44:57
+ * @FilePath     : /interview/react/typescript-learn/src/App.tsx
+ */
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';

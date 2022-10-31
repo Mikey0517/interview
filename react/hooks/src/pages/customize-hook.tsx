@@ -5,7 +5,8 @@
  * @LastEditTime : 2022-10-28 00:44:51
  * @FilePath     : /interview/react/hooks/src/pages/customize-hook.js
  */
-import React, { ClassType, Component, useEffect } from "react"
+import { Component, useEffect } from "react"
+import { ComponentType, ComponentClass } from "react"
 
 interface Props {
 
@@ -29,7 +30,7 @@ function CustmizeHook () {
   )
 }
 
-function hookHoc<T extends Props> (WrappedComponent: React.ComponentType<T>) {
+function hookHoc<T extends Props> (WrappedComponent: ComponentType<T>) {
 
   return (props: T) => {
     useEffect(() => {
@@ -45,7 +46,7 @@ function hookHoc<T extends Props> (WrappedComponent: React.ComponentType<T>) {
   }
 }
 
-function classHoc (WrappedComponent: React.ComponentType) {
+function classHoc (WrappedComponent: ComponentType) {
   return class extends Component {
     render () {
       return (
@@ -58,7 +59,7 @@ function classHoc (WrappedComponent: React.ComponentType) {
   }
 }
 
-function classInheritHoc (WrappedComponent: React.ComponentClass): any {
+function classInheritHoc (WrappedComponent: ComponentClass): any {
   return class extends WrappedComponent {
     componentDidMount () {
       // super.componentDidMount()

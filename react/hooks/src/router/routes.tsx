@@ -1,9 +1,9 @@
-/**
+/*
  * @Author       : 徐洋皓月
- * @Date         : 2022-10-27 18:21:33
+ * @Date         : 2022-10-29 17:40:36
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-10-28 01:01:49
- * @FilePath     : /interview/react/hooks/src/router/routes.js
+ * @LastEditTime : 2022-10-31 18:41:48
+ * @FilePath     : /interview/react/hooks/src/router/routes.tsx
  */
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,7 +11,11 @@ import { DefaultLayout } from '../layout'
 import HookExecutionOrder from '../pages/hook-execution-order'
 import CustmizeHook from '../pages/customize-hook'
 
-function Redirect({ to }) {
+interface RedirectProps {
+  to: string
+}
+
+function Redirect({ to }: RedirectProps) {
   const navigate = useNavigate();
 
   useEffect(() => {

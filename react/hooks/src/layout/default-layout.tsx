@@ -1,3 +1,10 @@
+/*
+ * @Author       : 徐洋皓月
+ * @Date         : 2022-10-29 17:40:36
+ * @LastEditors  : 徐洋皓月
+ * @LastEditTime : 2022-10-31 18:41:18
+ * @FilePath     : /interview/react/hooks/src/layout/default-layout.tsx
+ */
 /**
  * @Author       : 徐洋皓月
  * @Date         : 2022-10-27 17:48:54
@@ -23,7 +30,7 @@ function DefaultLayout () {
     return data.filter(route => route.key !== '/')
   }, [])
 
-  const handleClick = (params) => {
+  const handleClick = (params: {key: string}) => {
     navigate(params.key)
   }
 

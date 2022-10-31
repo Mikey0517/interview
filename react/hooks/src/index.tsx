@@ -1,10 +1,19 @@
+/*
+ * @Author       : 徐洋皓月
+ * @Date         : 2022-10-30 13:22:33
+ * @LastEditors  : 徐洋皓月
+ * @LastEditTime : 2022-10-30 13:28:02
+ * @FilePath     : /interview/react/typescript-learn/src/index.tsx
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 root.render(
   <React.StrictMode>
     <App />

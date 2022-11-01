@@ -2,7 +2,7 @@
  * @Author       : 徐洋皓月
  * @Date         : 2022-10-29 17:40:36
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-10-31 18:41:48
+ * @LastEditTime : 2022-11-01 17:34:57
  * @FilePath     : /interview/react/hooks/src/router/routes.tsx
  */
 import { useEffect } from 'react'
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import { DefaultLayout } from '../layout'
 import HookExecutionOrder from '../pages/hook-execution-order'
 import CustmizeHook from '../pages/customize-hook'
+import Concurrent from '../pages/concurrent'
+import BatchUpdate from '../pages/batch-update'
 
 interface RedirectProps {
   to: string
@@ -51,6 +53,26 @@ const routes = [
         key: 'customize-hook',
         path: "customize-hook",
         element: <CustmizeHook />,
+        // loader: teamLoader,
+      },
+      {
+        label: 'React 18 新特性学习',
+        key: 'react-18-characteristic',
+        path: "react-18-characteristic",
+        children: [
+          {
+            label: 'Concurrent Render',
+            key: 'concurrent',
+            path: "concurrent",
+            element: <Concurrent />,
+          },
+          {
+            label: 'BatchUpdate',
+            key: 'batch-update',
+            path: "batch-update",
+            element: <BatchUpdate />,
+          }
+        ]
         // loader: teamLoader,
       }
     ],

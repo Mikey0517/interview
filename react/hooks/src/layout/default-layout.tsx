@@ -2,7 +2,7 @@
  * @Author       : 徐洋皓月
  * @Date         : 2022-10-29 17:40:36
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-10-31 18:41:18
+ * @LastEditTime : 2022-11-01 17:25:27
  * @FilePath     : /interview/react/hooks/src/layout/default-layout.tsx
  */
 /**
@@ -15,13 +15,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
+import type { MenuProps } from 'antd'
 import routes from '../router/routes';
 
 const { Sider, Content } = Layout;
 
 function DefaultLayout () {
   const location = useLocation()
-  const [current, setCurrent] = useState(location.pathname.split('/')[1])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [openKeys, setOpenKeys] = useState<string[]>([])
   const navigate = useNavigate()
 
   const items = useMemo(function () {
@@ -30,20 +32,37 @@ function DefaultLayout () {
     return data.filter(route => route.key !== '/')
   }, [])
 
-  const handleClick = (params: {key: string}) => {
-    navigate(params.key)
+  const handleClick = (params: {keyPath: string[]}) => {
+    const path = `/${params.keyPath.slice().reverse().join('/')}`
+    if (path !== location.pathname) {
+      navigate(path)
+    }
   }
 
   useEffect(() => {
-    setCurrent(location.pathname.split('/')[1])
+    const pathArr = location.pathname.split('/').slice(1)
+    setSelectedKeys(pathArr)
+    setOpenKeys(pathArr.slice(0, pathArr.length - 1))
   }, [location.pathname])
 
+  const onOpenChange: MenuProps['onOpenChange'] = keys => {
+    setOpenKeys(keys)
+  };
+
   return (
-    <Layout style={{ height: '100vh', overflow: 'auto' }}>
+    <Layout style={{ height: '100vh' }}>
       <Sider>
-        <Menu items={ items } selectedKeys={ [current] } onClick={ handleClick }/>
+        <Menu
+          style={{ height: '100%', overflow: 'hidden auto' }}
+          items={ items }
+          selectedKeys={ selectedKeys }
+          openKeys={ openKeys }
+          onClick={ handleClick }
+          onOpenChange={ onOpenChange }
+          mode="inline"
+        />
       </Sider>
-      <Layout>
+      <Layout style={{ overflow: 'auto' }}>
         <Content>
           <Outlet />
         </Content>

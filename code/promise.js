@@ -2,7 +2,7 @@
  * @Author       : 徐洋皓月
  * @Date         : 2022-06-26 15:15:09
  * @LastEditors  : 徐洋皓月
- * @LastEditTime : 2022-09-16 11:11:20
+ * @LastEditTime : 2022-11-01 00:36:20
  * @FilePath     : /interview/code/promise.js
  */
 /**
@@ -130,7 +130,7 @@ function Promise (fn) {
     this.then(null, onError)
   }
 
-  fn(resolve)
+  fn(resolve, reject)
 }
 
 new Promise(function (resolve) {
